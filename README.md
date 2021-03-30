@@ -1,4 +1,4 @@
-# Introduction to Computer Emulation, Compiler Technologies, and Industrial Programming
+# Introduction to computer emulation, compiler technologies, and industrial programming
 
 * Lecturer: Ilya Dedinskiy
 * Length of course: 1 semester
