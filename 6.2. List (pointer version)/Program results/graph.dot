@@ -1,0 +1,20 @@
+digraph linked_list {
+  node [shape = "circle", style = "filled", fillcolor = "blue", fontcolor = "#FFFFFF", margin = "0.01"];
+  edge [style = "dashed"];
+  rankdir = "LR";
+
+  label = "List Dump";
+  "V00000000001C14E0"[shape = "record", fillcolor="blue", label = "100 | {next\n(00000000001C14A0) | previous\n(0000000000000000)} |<f0> 1"];
+  "V00000000001C14A0"[shape = "record", fillcolor="blue", label = "40 | {next\n(00000000001C1480) | previous\n(00000000001C14E0)} |<f0> 2"];
+  "V00000000001C1480"[shape = "record", fillcolor="blue", label = "30 | {next\n(00000000001C1460) | previous\n(00000000001C14A0)} |<f0> 3"];
+  "V00000000001C1460"[shape = "record", fillcolor="blue", label = "20 | {next\n(00000000001C1440) | previous\n(00000000001C1480)} |<f0> 4"];
+  "V00000000001C1440"[shape = "record", fillcolor="blue", label = "10 | {next\n(0000000000000000) | previous\n(00000000001C1460)} |<f0> 5"];
+  "V00000000001C1460"->"V00000000001C1440";
+  "V00000000001C1480"->"V00000000001C1460";
+  "V00000000001C14A0"->"V00000000001C1480";
+  "V00000000001C14E0"->"V00000000001C14A0";
+  "V00000000001C14A0"->"V00000000001C14E0";
+  "V00000000001C1480"->"V00000000001C14A0";
+  "V00000000001C1460"->"V00000000001C1480";
+  "V00000000001C1440"->"V00000000001C1460";
+}

@@ -1,0 +1,23 @@
+List Dump in 15:04:12, 11.01.2021
+List (ERROR #2: LINK ERROR) [000000000065FDE0] "lst"
+size        = 7
+capacity    = 12
+list_front  = 1
+list_back   = 7
+next_free   = 8
+logic_state = 1
+Data[00000000008D1570]:
+*[0] data = 1.#QNAN, next = 1, prev = 7
+*[1] data = 10, next = 2, prev = 0
+*[2] data = 14, next = 3, prev = 1
+*[3] data = 40, next = 4, prev = 5
+*[4] data = 50, next = 5, prev = 3
+*[5] data = 60, next = 6, prev = 4
+*[6] data = 80, next = 7, prev = 5
+*[7] data = 800, next = 0, prev = 6
+*[8] data = 1.#QNAN, next = 9, prev = -1
+*[9] data = 1.#QNAN, next = 10, prev = -1
+*[10] data = 1.#QNAN, next = 11, prev = -1
+*[11] data = 1.#QNAN, next = 12, prev = -1
+*[12] data = 1.#QNAN, next = -1, prev = -1
+

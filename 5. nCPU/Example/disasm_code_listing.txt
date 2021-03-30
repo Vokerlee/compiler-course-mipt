@@ -1,0 +1,19 @@
+Disassembler:
+compiled_code            ->            code
+"64 40 1c 00 00 00 00 00 00"           push 7
+"27"                                   call :label1
+"1c"                                   dump
+"1f"                                   hlt
+"00 00 00 10"                          label1:
+"6f"                                   pop rax
+"65"                                   push rax
+"65"                                   push rax
+"64 3f f0 00 00 00 00 00 00"           push 1
+"24"                                   jbe :label2
+"65"                                   push rax
+"64 3f f0 00 00 00 00 00 00"           push 1
+"02"                                   sub
+"27"                                   call :label1
+"04"                                   mul
+"00 00 00 32"                          label2:
+"28"                                   ret

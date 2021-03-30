@@ -1,0 +1,29 @@
+digraph linked_list {
+  node [shape = "circle", style = "filled", fillcolor = "blue", fontcolor = "#FFFFFF", margin = "0.01"];
+  rankdir = "LR";
+
+  label = "List Dump";
+  "Vertex 1"[shape = "record", label = "10\nFront | {prev\n0 | <f0> pos\n1| next\n2} | number\n1"];
+  "Vertex 2"[shape = "record", label = "14 | {prev\n1 | <f0> pos\n2| next\n3} | number\n2"];
+  "Vertex 3"[shape = "record", label = "40 | {prev\n5 | <f0> pos\n3| next\n4} | number\n3"];
+  "Vertex 4"[shape = "record", label = "50 | {prev\n3 | <f0> pos\n4| next\n5} | number\n4"];
+  "Vertex 5"[shape = "record", label = "60 | {prev\n4 | <f0> pos\n5| next\n6} | number\n5"];
+  "Vertex 6"[shape = "record", label = "80 | {prev\n5 | <f0> pos\n6| next\n7} | number\n6"];
+  "Vertex 7"[shape = "record", label = "800\nBack | {prev\n6 | <f0> pos\n7| next\n0} | number\n7"];
+  "Vertex 1"->"Vertex 2";
+  edge [color="#FE6200"];
+  "Vertex 2"->"Vertex 3";
+  edge [color="#000000"];
+  "Vertex 3"->"Vertex 4";
+  "Vertex 4"->"Vertex 5";
+  "Vertex 5"->"Vertex 6";
+  "Vertex 6"->"Vertex 7";
+  "Vertex 2"->"Vertex 1";
+  edge [color="#FE6200"];
+  "Vertex 3"->"Vertex 5";
+  edge [color="#000000"];
+  "Vertex 4"->"Vertex 3";
+  "Vertex 5"->"Vertex 4";
+  "Vertex 6"->"Vertex 5";
+  "Vertex 7"->"Vertex 6";
+}

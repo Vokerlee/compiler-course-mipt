@@ -1,0 +1,21 @@
+push 7
+call :factorial
+dump
+hlt
+
+factorial:
+pop rax
+push rax
+
+push rax
+push 1
+jbe :factorial_end
+
+push rax
+push 1
+sub
+call :factorial
+mul
+
+factorial_end:
+ret

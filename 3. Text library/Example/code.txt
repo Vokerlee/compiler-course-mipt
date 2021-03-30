@@ -1,0 +1,27 @@
+// some info without any sence
+push 10000
+pop rax
+push 20000
+pop rbx
+push 30000
+pop rcx
+push 40000
+
+pop rdx
+push 0
+pop rex
+
+push 8 // push the number
+//bfgnfgns
+//dhgf
+push rex // put the out-number of stack into the variable
+push 30
+mul
+push 0
+add
+push rax
+add
+pop rbx
+pop [rbx]
+
+push 3 // push the number

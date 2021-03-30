@@ -1,0 +1,17 @@
+push 7
+call :label1
+dump
+hlt
+label1:
+pop rax
+push rax
+push rax
+push 1
+jbe :label2
+push rax
+push 1
+sub
+call :label1
+mul
+label2:
+ret
