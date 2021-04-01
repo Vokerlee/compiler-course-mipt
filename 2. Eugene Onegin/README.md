@@ -17,5 +17,5 @@ Except the `rhyme` regime, the regimes `ascending` and `descending` can be used.
 
 ## How it works
 
-The main idea of the implementation of the program is that text is splitted in lines, which are sorted with `megasort`. This is the original way to sort the lines in the following way: at the beginning the quick sort is used, and when `LIM_QSORT` - number of the elements in recursion entry is reached, the insertion sort is activated to avoid costly recursive occurrences of quick sort. In practise it boosts the program by 30%
+The main idea of the implementation of the program is that text is splitted in lines, which are sorted with `megasort`. This is the original way to sort the lines in the following way: at the beginning the `quicksort` is used, and when `LIM_QSORT` - number of the elements in recursion entry is reached, the `insertion` sort is activated to avoid costly recursive occurrences of quick sort. In practise it boosts the program by 30%
 
