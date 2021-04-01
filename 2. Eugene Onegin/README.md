@@ -13,5 +13,7 @@ Here is the example of usage the program (the command is entered in the console)
 
 `"Eugene Onegin.exe" source.txt result.txt rhyme bred+`
 
+Except the rhyme regime, the regimes `ascending` and `descending` can be used. If you don't want to create bredogenerator file, use `bred-`.
+
 Here you should pass the values x1 and x2, which are the roots of the equation. If there is 1 root, then x1=x2, if the equation hass no roots, then x1 = x2 = 0.
 The function returns the number of roots.
