@@ -1,12 +1,12 @@
+# Sorting lines (Eugene Onegin)
 
-# Solution to quadratic equations
-
-This project is the first in the seria of projects, devoted to introduction to industrial programming.
-The language of program is Russian. It can solve quadratic equation in real numbers.
+This project is the second project in the seria of projects, devoted to introduction to industrial programming.
+The language of program is Russian. It can sort lines of big texts in different regimes.
 
 ## How to use
 
-All you need to solve your equation is to use this function:
+First of all you should prepare ypur file with initial text. The second you should do is to come up with the name of result file.
+
 ```C++
     int solve_square(double* x1, double* x2);
 ``` 
