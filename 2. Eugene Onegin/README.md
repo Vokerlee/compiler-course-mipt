@@ -10,6 +10,7 @@ So there are three different regimes of the program: rhyme-sort - the sort, asce
 Also there is an additional option -- generator of ravings (or bredogenerator in Russian).
 
 Here is the example of usage the program (the command is entered in the console):
+
 `"Eugene Onegin.exe" source.txt result.txt rhyme bred+`
 
 Here you should pass the values x1 and x2, which are the roots of the equation. If there is 1 root, then x1=x2, if the equation hass no roots, then x1 = x2 = 0.
