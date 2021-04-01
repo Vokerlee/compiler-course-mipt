@@ -13,7 +13,9 @@ Here is the example of usage the program (the command is entered in the console)
 
 `"Eugene Onegin.exe" source.txt result.txt rhyme bred+`
 
-Except the rhyme regime, the regimes `ascending` and `descending` can be used. If you don't want to create bredogenerator file, use `bred-`.
+Except the `rhyme` regime, the regimes `ascending` and `descending` can be used. If you don't want to create bredogenerator file, use `bred-`.
 
-Here you should pass the values x1 and x2, which are the roots of the equation. If there is 1 root, then x1=x2, if the equation hass no roots, then x1 = x2 = 0.
-The function returns the number of roots.
+## How it works
+
+The main idea of the implementation of the program is that text is splitted in lines, which are sorted with `megasort`. This is the original way to sort the lines in the following way: at the beginning the quick sort is used, and when `LIM_QSORT` - number of the elements in recursion entry is reached, the insertion sort is activated to avoid costly recursive occurrences of quick sort. In practise it boosts the program by 30%
+
