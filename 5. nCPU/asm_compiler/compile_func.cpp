@@ -90,8 +90,8 @@ int process_line (char *asm_buffer, label *labels, int *bytes_buffer, line_t *li
     assert(line);
     assert(file_listing);
 
-    char *command = (char *) calloc(line->length, sizeof(char));
-    char *label   = (char *) calloc(line->length, sizeof(char));
+    char *command = (char *) calloc(line->length + 1, sizeof(char));
+    char *label   = (char *) calloc(line->length + 1, sizeof(char));
     char regist   = 0;
     double number = NAN;
 
