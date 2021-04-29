@@ -11,7 +11,7 @@ int main()
     text_t text = {};
     construct_text(&text);
 
-    fill_text(source, &text, "no comments");
+    fill_text(source, &text, NO_COMMENTS);
 
     compile(&text, res);
 
