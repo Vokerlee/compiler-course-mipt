@@ -149,7 +149,10 @@ void find_lines_of_file (text_t *text, char read_regime)
             {
                 text->n_lines++;
                 counter++;
-            }
+
+                while (isspace(text->buffer[counter]) && text->buffer[counter] != '\n')
+                    counter++;
+            } 
 
             if (text->buffer[counter] == '\0')
                 break;
