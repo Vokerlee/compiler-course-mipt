@@ -150,7 +150,7 @@ void find_lines_of_file (text_t *text, char read_regime)
                 text->n_lines++;
                 counter++;
 
-                while (isspace(text->buffer[counter]) && text->buffer[counter] != '\n')
+                while (isspace(text->buffer[counter]) && text->buffer[counter] != '\n' && text->buffer[counter] != '\0')
                     counter++;
             } 
 
@@ -159,10 +159,10 @@ void find_lines_of_file (text_t *text, char read_regime)
 
             if (read_regime == NO_COMMENTS && strncmp(text->buffer + counter, "//", 2) == 0)
             {
-                text->n_lines++;
-
                 while (text->buffer[counter] != '\n')
                     counter++;
+
+                counter--;
             }
             else
                 text->n_real_lines++;
@@ -171,7 +171,6 @@ void find_lines_of_file (text_t *text, char read_regime)
         counter++;
     }
 
-    text->n_real_lines++;
     text->n_lines++;
 }
 
