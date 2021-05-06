@@ -36,7 +36,7 @@ void lang_asm (FILE *formula)
 void analyse_expr (bin_tree_elem *element, FILE *assmbl, variables *var)
 {
     if (element->type == NUM)
-        fprintf(assmbl, "push %lg // push the number\n\n", element->value);
+        fprintf(assmbl, "push %d // push the number\n\n", (int) element->value);
     else if (element->type == GLOB_VAR)
     {
         fprintf(assmbl, "// push the global variable:\n"
