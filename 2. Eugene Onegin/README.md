@@ -5,7 +5,7 @@ The language of program is Russian. It can sort lines of big texts in different 
 
 ## How to use
 
-First of all you should prepare ypur file with initial text. The second you should do is to come up with the name of result file.
+First of all you should prepare your file with initial text. The second you should do is to come up with the name of result file.
 So there are three different regimes of the program: rhyme-sort - the sort, ascending-sort and descending-sort (I home the names speak for themselves).
 Also there is an additional option - generator of ravings (or bredogenerator in Russian).
 
