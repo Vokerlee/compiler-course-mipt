@@ -40,4 +40,6 @@ void print_text_lines (FILE *res, text_t *text);
 ```
 All in all this `text_t` structure is very convenient to use it in other projects.
 
+!!Remember to use `void destruct_text (text_t *text);` at the end of usage!! 
+
 Thanks for attention.
