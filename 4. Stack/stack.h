@@ -12,19 +12,9 @@
 
 #include "stack_config.h"
 
-#define DOUBLE_T
-
-#ifdef DOUBLE_T
-    typedef double data_t;
-    #define SPECIFICATOR "lg"
-    const data_t POISON = NAN;
-#endif
-
-#ifdef INT_T
-    typedef int data_t;
-    #define SPECIFICATOR "d"
-    const data_t POISON = INT_MAX;
-#endif
+typedef double data_t;
+#define SPECIFICATOR "lg"
+const data_t POISON = NAN;
 
 static int STACK_POP_STATE = 0;
 
