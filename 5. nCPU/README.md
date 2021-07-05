@@ -63,15 +63,16 @@ push rcx
 push 0
 ja :label1
 ...
+=================================
 
-jump :label_name  // simple jump
+jump :label_name  // simple jump command
 ja   :label_name  // if the penultimate number in stack is more then on the top
 jae  :label_name  // if the penultimate number in stack is more or equal then on the top
 jb   :label_name  // if the penultimate number in stack is less then on the top
 jbe  :label_name  // if the penultimate number in stack is less or equal then on the top
 je   :label_name  // if the penultimate number in stack is equal to a number on the top
 jne  :label_name  // if the penultimate number in stack is not equal to a number on the top
-=================================
+
 ```
 
 ### Functions
