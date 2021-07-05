@@ -93,6 +93,24 @@ push rbx
 ret
 ```
 
+### Memory usage
+
+There is a 100000 elements' array of `double` type, which is like RAM.
+Here is the examples how to use it:
+
+```asm
+push [1000]
+pop [99]
+
+push [rbx]
+pop [rdx]
+
+push [rax + 54]
+pop [rex - 87]
+```
+
+Remember, that like any CPU nCPU can create segmentation fault in case of invalid memory!
+
 
 ## Compilation
 
