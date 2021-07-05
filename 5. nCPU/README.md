@@ -109,7 +109,7 @@ push [rax + 54]
 pop [rex - 87]
 ```
 
-Remember, that like any CPU nCPU can create segmentation fault in case of invalid memory!
+Remember, that like any CPU nCPU can call segmentation fault in case of invalid memory!
 
 
 ## Compilation
