@@ -314,7 +314,7 @@ int elem_comp_list (const void *elem1, const void *elem2);
 
 //-----------------------------------------------------------------------------
 //! Sorts the elements in list
-//! @param [in] lst   - the struct of list
+//! @param [in] lst - the struct of list
 //! @version 1.0
 //! @authors Vokerlee
 //! @brief Sorts the elements in list
@@ -323,12 +323,12 @@ int elem_comp_list (const void *elem1, const void *elem2);
 void sort_list (linked_list *lst);
 
 //-----------------------------------------------------------------------------
-//! Is used by function sort to sort the elements with quick sort
+//! Is used by function "void sort_list (linked_list *lst)" to sort the elements with quick sort
 //! @param [in] lst            - the struct of list
 //! @param [in] l_0            - the first element of list
 //! @param [in] r_0            - the last element of list
 //! @param [in] list_elem_comp - the comparator of element in list
-//! @warning Before usage of this function the list must be sort in "next" elements with function list_sort_next
+//! @warning Before usage of this function the list must be sort in "next" elements with function sort_next_list
 //! @version 1.0
 //! @authors Vokerlee
 //! @brief Is used by function sort to sort the elements with quick sort
@@ -338,7 +338,7 @@ void qsort_list (linked_list *lst, int l_0, int r_0, int (*list_elem_comp)(const
 
 //-----------------------------------------------------------------------------
 //! Opens the possibility to work with logical positions
-//! @param [in] lst            - the struct of list
+//! @param [in] lst - the struct of list
 //! @version 1.0
 //! @authors Vokerlee
 //! @brief Sorts the elements of list and opens the possibility to work with logical positions
