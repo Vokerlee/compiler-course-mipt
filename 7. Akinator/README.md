@@ -11,7 +11,7 @@ AG — Akinator Game.
 
 All you should do to download the program is:
 * To download and install [Graphviz for Windows](https://graphviz.org/download/#windows).
-* To download current repository and launch `../"Akinator program"/akinator.exe`.
+* To download current repository and launch `../../Akinator program/akinator.exe`.
 
 There are 4 regimes of the program:
 * To play game (where you can add your object to AG base).
