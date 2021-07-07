@@ -1,7 +1,7 @@
 #ifndef DIFF_H_INCLUDED
 #define DIFF_H_INCLUDED
 
-#include <text.h>
+#include "text.h"
 #include <ctype.h>
 #include <time.h>
 
@@ -18,9 +18,9 @@ struct variables
 
 struct elements
 {
-    bin_tree_elem **elements = nullptr;
+    bin_tree_elem** elements_ = nullptr;
 
-    int curr_size = 0;
+    int curr_size_ = 0;
 };
 
 struct subst_elem

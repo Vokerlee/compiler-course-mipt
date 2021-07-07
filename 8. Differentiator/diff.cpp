@@ -84,11 +84,11 @@ void create_diff_article (FILE *formula)
     variables var = {};
     elements elem = {};
 
-    elem.elements = (bin_tree_elem **) calloc(100, sizeof(bin_tree_elem *));
+    elem.elements_ = (bin_tree_elem **) calloc(MAX_TREE_ELEM, sizeof(bin_tree_elem *));
 
     fill_tree(&tree, formula, &var, &elem);
 
-    free(elem.elements);
+    free(elem.elements_);
 
     if (tree.root == nullptr)
     {
@@ -166,22 +166,19 @@ bin_tree_elem *create_e_tree (variables *var, elements *elem, text_t *text)
     if (sign == -1)
         vertex = MULTIPLY(CR_NUM(-1), vertex);
 
-    if (*(text->counter) == '+' || *(text->counter) == '-')
+    while (*(text->counter) == '+' || *(text->counter) == '-')
     {
-        while (*(text->counter) == '+' || *(text->counter) == '-')
-        {
-            if (*(text->counter) == '+')
-                op = create_tree_element(OPER, ADD, nullptr, nullptr);
-            else
-                op = create_tree_element(OPER, SUB, nullptr, nullptr);
+        if (*(text->counter) == '+')
+            op = create_tree_element(OPER, ADD, nullptr, nullptr);
+        else
+            op = create_tree_element(OPER, SUB, nullptr, nullptr);
 
-            op->left = vertex;
+        op->left = vertex;
 
-            text->counter++;
+        text->counter++;
 
-            op->right = create_t_tree(var, elem, text);
-            vertex = op;
-        }
+        op->right = create_t_tree(var, elem, text);
+        vertex = op;
     }
 
     SKIP_SPACES
@@ -243,7 +240,7 @@ bin_tree_elem *create_w_tree (variables *var, elements *elem, text_t *text)
         {
             operands[quant - 1] = create_tree_element(OPER, POW, nullptr, nullptr);
 
-            elem->elements[elem->curr_size++] = operands[quant - 1];
+            elem->elements_[elem->curr_size_++] = operands[quant - 1];
 
             text->counter++;
 
@@ -367,7 +364,7 @@ bin_tree_elem *create_n_tree (variables *var, elements *elem, text_t *text)
         return nullptr;
     }
 
-    elem->elements[elem->curr_size++] = vertex;
+    elem->elements_[elem->curr_size_++] = vertex;
 
     return vertex;
 }
@@ -425,6 +422,8 @@ void print_diff_tex (bin_tree *diff_tree, bin_tree *tree, variables *var)
                  "\\usepackage{wasysym}\n"
                  "\\usepackage{lscape}\n"
                  "\\usepackage{xcolor}\n"
+                 "\\usepackage{titlesec}\n"
+                 "\\titlelabel{ \\thetitle.\\quad }\n"
                  "\\usepackage{hyperref}\n"
                  "\\usepackage[normalem]{ulem}\n\n"
                  "\\hypersetup\n{\n"
@@ -437,8 +436,8 @@ void print_diff_tex (bin_tree *diff_tree, bin_tree *tree, variables *var)
                  "\\usepackage{fancyhdr}\n"
                  "\\pagestyle{fancy}\n"
                  "\\fancyhead{}\n"
-                 "\fancyhead[L]{Как вычислять производную}\n"
-		 "\fancyhead[R]{Глаз Роман, группа Б01-007}\n"
+                 "\\fancyhead[L]{Как вычислять производную}\n"
+                 "\\fancyhead[R]{Глаз Роман, группа Б01-007}\n"
                  "\\fancyfoot[C]{\\thepage}\n"
 
                  "\\begin{document}\n\n"
@@ -472,9 +471,9 @@ void print_diff_tex (bin_tree *diff_tree, bin_tree *tree, variables *var)
                  "\\newpage\n\n"
 
                  "\\section{Как вычислить производную}\n"
-		 "Как известно, вероятность того, что вы правильно найд те производную, равна $(\\pi - \\text{e})$ [Неопубликованные исследования Ландау. Часть 3, стр. 1045]. "
-		 "Но мы докажем, что эту вероятность можно повысить с помощью этой чудесной статьи, "
-		 "также вы научитесь считать арифметические выражения вида $2+2$ и наконец вспомните, что такое правильно брать производные.");
+                 "Как известно, вероятность того, что вы правильно найд те производную, равна $(\\pi - \\text{e})$ [Неопубликованные исследования Ландау. Часть 3, стр. 1045]. "
+                 "Но мы докажем, что эту вероятность можно повысить с помощью этой чудесной статьи, "
+                 "также вы научитесь считать арифметические выражения вида $2+2$ и наконец вспомните, что такое правильно брать производные.");
 
 	fprintf(tex, "\nДля разминки вычислим следующую элементарную производную:\n");
 
@@ -536,18 +535,20 @@ void print_diff_tex (bin_tree *diff_tree, bin_tree *tree, variables *var)
 		 "[2] Юшкевич А. М. История Математики (с древнейших времен и до 19 века) в 3-х томах [1970]\n\n"
 		 "[3] Ландау Л. Д., Лифшиц Е. М. Теоретическая физика, Статистическая физика, Том 9, Часть 2\n\n"
 		 "[4] Рыбников Ю. С. Таблица производных от древних Русов\n\n"
-		 "[5] Гениальный автор этого текста, который знает всего 10-15 фраз на всю статью и его \\href{https://github.com/Vokerlee/MIPT-1-semester/tree/main/8.%%20Differentiator}{репозиторий}.\n\n");
+		 "[5] Гениальный автор этого текста, который знает всего 10-15 фраз на всю статью и его "
+         "\\href{https://github.com/Vokerlee/Introduction-to-compiler-technologies/tree/master/8.%%20Differentiator}{репозиторий}.\n\n");
     fprintf(tex, "\n\\end{document}\n");
 
     fclose(tex);
 
-    system(PATH_CODE);
-    system(DELETE_OLD);
-    system(RENAME_NEW);
+    // This block of code is used only in case, when compiler generates file with CP1251 encoding instead of UTF-8
+    //system(PATH_CODE);
+    //system(DELETE_OLD);
+    //system(RENAME_NEW);
+    // In all other cases ignore this code
 
     system(TEX_CMD);
     system(START_TEX);
-
 }
 
 void print_formula (bin_tree_elem *element, FILE *tex, variables *var, int priority)
@@ -1203,7 +1204,10 @@ void delete_all_subst (bin_tree_elem *element, bin_tree_elem *prev, int link)
     if (L != nullptr)
         delete_all_subst(L, element, LEFT);
 
-    if (element->type == SUBST)
+    if (R != nullptr)
+        delete_all_subst(R, element, RIGHT);
+
+    if (element->type == SUBST && element->left != nullptr)
     {
         if (link == LEFT)
             prev->left = element->left;
@@ -1212,9 +1216,6 @@ void delete_all_subst (bin_tree_elem *element, bin_tree_elem *prev, int link)
 
         free(element);
     }
-
-    if (R != nullptr)
-        delete_all_subst(R, element, RIGHT);
 }
 
 int search_in_substitutions (substitutions *sub, bin_tree_elem *element)
@@ -1348,37 +1349,37 @@ const char *phrase_cond_print (void)
     switch (random)
     {
         case 0:
-	    return "Очевидно, что";
-	case 1:
-	    return "Любой школьник знает, что";
-	case 2:
-	    return "В 4-ом классе вы проходили, что";
-	case 3:
-	    return "Ну разве это не очевидно?:";
-	case 4:
-	    return "Если не понятно, то просто вот посмотрите и сразу станет понятно, что";
-	case 5:
-	    return "Доверьтесь мне, что";
-	case 6:
-	    return "Если вы дочитали до этого момента, то поздравляю, вы совсем тупой и не смогли сами вычислить производную!";
-	case 7:
-	    return "А это вы найд те в учебнике Кудрявцева [т.1, стр. 127, 7 строка]:";
-	case 8:
-	    return "А теперь выполняем следующее преобразование.....:";
-	case 9:
-	    return "Лол кек \\sout{чебурек} производная:";
-	case 10:
-	    return "Just trust me, that:";
-	case 11:
-	    return "Тебе ещ ряды ботать, поэтому давай быстрее:";
-	case 12:
-	    return "Если ты дош л до этого момента, значит ты заинтересован и пойм шь следующее:";
-	case 13:
-	    return "Тяжко в этом мире...:";
-	case 14:
-	    return "Я что, зря писал мой \\href{https://drive.google.com/drive/folders/1cQOob8lLqhboZnilkguOm7CtLHlbPb1G?usp=sharing}{ВПВ по физике}:";
-	default:
-	    return "Пока вы это читаете, зацените мой \\href{https://drive.google.com/drive/folders/1cQOob8lLqhboZnilkguOm7CtLHlbPb1G?usp=sharing}{ВПВ по физике}:";
+	        return "Очевидно, что";
+	    case 1:
+	        return "Любой школьник знает, что";
+	    case 2:
+	        return "В 4-ом классе вы проходили, что";
+	    case 3:
+	        return "Ну разве это не очевидно?:";
+	    case 4:
+	        return "Если не понятно, то просто вот посмотрите и сразу станет понятно, что";
+	    case 5:
+	        return "Доверьтесь мне, что";
+	    case 6:
+	        return "Если вы дочитали до этого момента, то поздравляю, вы совсем тупой и не смогли сами вычислить производную!";
+	    case 7:
+	        return "А это вы найд те в учебнике Кудрявцева [т.1, стр. 127, 7 строка]:";
+	    case 8:
+	        return "А теперь выполняем следующее преобразование.....:";
+	    case 9:
+	        return "Лол кек \\sout{чебурек} производная:";
+	    case 10:
+	        return "Just trust me, that:";
+	    case 11:
+	        return "Тебе ещ ряды ботать, поэтому давай быстрее:";
+	    case 12:
+	        return "Если ты дош л до этого момента, значит ты заинтересован и пойм шь следующее:";
+	    case 13:
+	        return "Тяжко в этом мире...:";
+	    case 14:
+	        return "Я что, зря писал мой \\href{https://drive.google.com/drive/folders/1cQOob8lLqhboZnilkguOm7CtLHlbPb1G?usp=sharing}{ВПВ по физике}:";
+	    default:
+	        return "Пока вы это читаете, зацените мой \\href{https://drive.google.com/drive/folders/1cQOob8lLqhboZnilkguOm7CtLHlbPb1G?usp=sharing}{ВПВ по физике}:";
     }
 }
 
@@ -1389,33 +1390,33 @@ const char *phrase_eq_print (void)
     switch (random)
     {
         case 0:
-	    return "равно";
-	case 1:
-	    return "равно (хотя хз)";
-	case 2:
-	    return "можно представить в виде";
-	case 3:
-	    return "преобразовывается в";
-	case 4:
-	    return "слишком сложная производная. Но, согласно таблице, можно получить";
-	case 5:
-	    return "здесь должна быть эпичная фраза, но я е не придумал:";
-	case 6:
-	    return "с л гкостью переходит в";
-	case 7:
-	    return "с маленькой л гкостью переходит в";
-	case 8:
-	    return "можно преобразовать так:";
-	case 9:
-	    return "можно разложить в Ряд, затем проинтегрировать каждое слагамое и взять вторую производную:";
-	case 10:
-	    return "более простая форма записи, чем";
-	case 11:
-	    return "четыре буквы этой фразы набрала Полторашка:";
-	case 12:
-	    return "если вы уже видели ссылку на мой ВПВ, то посмотрите его пожалуйста, если ещ этого не сделали:";
-	default:
-	    return "если ты не гомосек, скинь сюда 50Р за 120 сек: +79254492748";
+	        return "равно";
+	    case 1:
+	        return "равно (хотя хз)";
+	    case 2:
+	        return "можно представить в виде";
+	    case 3:
+	        return "преобразовывается в";
+	    case 4:
+	        return "слишком сложная производная. Но, согласно таблице, можно получить";
+	    case 5:
+	        return "здесь должна быть эпичная фраза, но я её не придумал:";
+	    case 6:
+	        return "с лёгкостью переходит в";
+	    case 7:
+	        return "с маленькой лёгкостью переходит в";
+	    case 8:
+	        return "можно преобразовать так:";
+	    case 9:
+	        return "можно разложить в Ряд, затем проинтегрировать каждое слагамое и взять вторую производную:";
+	    case 10:
+	        return "более простая форма записи, чем";
+	    case 11:
+	        return "четыре буквы этой фразы набрала Полторашка:";
+	    case 12:
+	        return "если вы уже видели ссылку на мой ВПВ, то посмотрите его пожалуйста, если ещё этого не сделали:";
+	    default:
+	        return "если ты не гомосек, скинь сюда 50Р за 120 сек: +79254492748";
     }
 }
 
@@ -1457,7 +1458,7 @@ void syntax_error (text_t *text, elements *elem, int line, const char *file)
 
     printf("...\n\n");
 
-    for (int i = 0; i < elem->curr_size; i++)
-        free(elem->elements[i]);
+    for (int i = 0; i < elem->curr_size_; i++)
+        free(elem->elements_[i]);
 }
 

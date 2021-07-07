@@ -1,12 +1,13 @@
 #ifndef DIFF_CONFIG_H_INCLUDED
 #define DIFF_CONFIG_H_INCLUDED
 
-const char TEX_CMD[] = {"pdflatex article.tex"};
-const char START_TEX[] = {"start article.pdf"};
-const char PATH_CODE[] = {"iconv.exe -t UTF-8 -f CP1251 < article.tex > article_temp.tex"};
+const char TEX_CMD[]    = {"pdflatex article.tex"};
+const char START_TEX[]  = {"start article.pdf"};
+const char PATH_CODE[]  = {"iconv.exe -t UTF-8 -f CP1251 < article.tex > article_temp.tex"};
 const char DELETE_OLD[] = {"del article.tex"};
 const char RENAME_NEW[] = {"ren article_temp.tex article.tex"};
 
+const int MAX_TREE_ELEM         = 200;
 const int MAX_VAR_NUM           = 10;
 const int MAX_OPER_ROW          = 20;
 const int MAX_VAR_NAME_LENGTH   = 20;
