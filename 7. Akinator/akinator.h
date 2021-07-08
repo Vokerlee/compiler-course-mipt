@@ -1,14 +1,6 @@
 #ifndef AKINATOR_H_INCLUDED
 #define AKINATOR_H_INCLUDED
 
-#include <ctype.h>
-#include <locale.h>
-
-#define TX_USE_SPEAK
-#include <TXLib.h>
-
-#include "tree.h"
-
 #include "akinator_config.h"
 
 //-----------------------------------------------------------------------------

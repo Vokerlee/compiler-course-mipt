@@ -1,14 +1,29 @@
 #include "akinator.h"
 
+#define READ_PHRASE(buffer)                     \
+    fflush(stdin);                              \
+    fgets(buffer, MAX_CMD_LENGTH, stdin);       \
+    buffer[strlen(buffer) - 1] = 0;
+    
+
 void akinator_menu (const char *base)
 {
     FILE *source = fopen(base, "rb");
-    assert(source);
+
+    if (!source)
+    {
+        printf("\n!!There is no file \"akinator_base.txt\"...\n"
+                "Program was terminated...\n");
+
+        abort();
+    }
 
     bin_tree tree = {};
     construct_tree(&tree, "tree");
 
     fill_tree_from_base(&tree, source);
+
+    fclose(source);
 
     printf("Привет, меня зовут Акинатор!\n"
            "Введите, пожалуйста, режим, с которым вы хотите работать:))\n"
@@ -21,17 +36,15 @@ void akinator_menu (const char *base)
 
     printf("Выбранный режим: ");
 
-    char *regime = (char *) calloc(100, sizeof(char));
+    char *regime = (char *) calloc(MAX_CMD_LENGTH, sizeof(char));
 
-    fflush(stdin);
-    gets(regime);
+    READ_PHRASE(regime)
 
-    while(strlen(regime) > 1 || isdigit(regime[0]) == 0)
+    while(strlen(regime) > 1 || regime[0] < '1' || regime[0] > '4')
     {
         printf("\nОшибка! Пожалуйста, введите число от 1 до 4, выбрав режим, с которым вы хотите со мной работать!\n");
-        txSpeak("Ошибка! Введите число от нуля до четырёх");
-        fflush(stdin);
-        gets(regime);
+        txSpeak("Ошибка! Введите число от одного до четырёх");
+        READ_PHRASE(regime)
     }
 
     int continue_status = OFF;
@@ -39,7 +52,13 @@ void akinator_menu (const char *base)
     while (1)
     {
         if (strcmp(regime, "1") == 0)
+        {
             object_guess(&tree);
+
+            source = fopen(base, "wb"); // now for writing, not reading
+            fill_akinator_base(&tree, source);
+            fclose(source);
+        }
         else if (strcmp(regime, "2") == 0)
             object_compare(&tree);
         else if (strcmp(regime, "3") == 0)
@@ -51,33 +70,34 @@ void akinator_menu (const char *base)
 
         txSpeak("\v\nЕсли хотите продолжить пользоваться мной, введите \"1\", иначе \"0\".\n");
 
-        scanf("%d", &continue_status);
+        READ_PHRASE(regime)
 
-        if (continue_status == ON)
+        while (strlen(regime) > 1 || (regime[0] != '0' && regime[0] != '1'))
+        {
+            txSpeak("\v\nЯ вас не поняла, введите, пожалуйста \"1\" или \"0\".\n");
+            READ_PHRASE(regime)
+        }
+
+        if (strlen(regime) == 1 && regime[0] == '1')
         {
             txSpeak("\v\nВыберите режим: ");
 
-            fflush(stdin);
-            gets(regime);
+            READ_PHRASE(regime)
 
             while(strlen(regime) > 1 || isdigit(regime[0]) == 0)
             {
                 txSpeak("\v\nОшибка! Пожалуйста, введите число от 1 до 4, выбрав режим, с которым вы хотите со мной работать!\n");
-                fflush(stdin);
-                gets(regime);
+                READ_PHRASE(regime)
             }
         }
         else
             break;
     }
 
-    fclose(source);
     free(regime);
 
-    source = fopen(base, "wb");
-
+    source = fopen(base, "wb"); // now for writing, not reading
     fill_akinator_base(&tree, source);
-
     fclose(source);
 
     destruct_tree(&tree);
@@ -98,6 +118,14 @@ void fill_tree_from_base (bin_tree *tree, FILE *base)
     counter--;
 
     tree->root = create_tree(tree, buffer, &counter);
+
+    if (tree->root == nullptr)
+    {
+        printf("\n!!There is an error in akinator base!!\n"
+                "Program was terminated...\n");
+
+        abort();
+    }
 
     counter = 0;
 
@@ -155,6 +183,14 @@ bin_tree_elem *create_tree (bin_tree *tree, char *buffer, int *counter)
         {
             element->left  = create_tree(tree, buffer, counter);
             element->right = create_tree(tree, buffer, counter);
+
+            if (element->left == nullptr || element->right == nullptr)
+            {
+                printf("\n!!There is an error in akinator base!!\n"
+                       "Program was terminated...\n");
+
+                abort();
+            }
         }
     }
 
@@ -166,6 +202,8 @@ bin_tree_elem *create_tree (bin_tree *tree, char *buffer, int *counter)
         (*counter)++;
         return element;
     }
+
+    return nullptr;
 }
 
 void add_prev_links (bin_tree_elem *element, int *counter)
@@ -203,20 +241,18 @@ void ask_questions (bin_tree *tree, bin_tree_elem *element)
     txSpeak("\v\nПожалуйста, ответьте \"Да\" или \"Нет\"\n"
             "Это %s?\n", element->data);
 
-    char *answer = (char *) calloc(4, sizeof(char));
+    char *answer = (char *) calloc(MAX_CMD_LENGTH, sizeof(char));
 
-    fflush(stdin);
-    gets(answer);
+    READ_PHRASE(answer)
 
-    while(strcmp(answer, "Äà") != 0 && strcmp(answer, "Íåò") != 0)
+    while(strcmp(answer, "Да") != 0 && strcmp(answer, "Нет") != 0)
     {
         txSpeak("\v\nОшибка! Пожалуйста, ответьте \"Да\" или \"Нет\"\n");
 
-        fflush(stdin);
-        gets(answer);
+        READ_PHRASE(answer)
     }
 
-    if (strcmp(answer, "Äà") == 0)
+    if (strcmp(answer, "Да") == 0)
     {
         free(answer);
 
@@ -228,7 +264,7 @@ void ask_questions (bin_tree *tree, bin_tree_elem *element)
         else
             ask_questions(tree, element->right);
     }
-    else if (strcmp(answer, "Íåò") == 0)
+    else if (strcmp(answer, "Нет") == 0)
     {
         free(answer);
 
@@ -238,9 +274,8 @@ void ask_questions (bin_tree *tree, bin_tree_elem *element)
             txSpeak("Я не знаю вашего слова! Пожалуйста введите его:");
             
             char *new_word = (char *) calloc(MAX_CMD_LENGTH, sizeof(char));
-
-            fflush(stdin);
-            gets(new_word);
+            
+            READ_PHRASE(new_word)
 
             bin_tree_elem *new_elem1 = (bin_tree_elem *) calloc(1, sizeof(bin_tree_elem));
 
@@ -261,19 +296,21 @@ void ask_questions (bin_tree *tree, bin_tree_elem *element)
             element->left  = new_elem1;
             element->right = new_elem2;
 
-            free(new_word);
-            new_word = (char *) calloc(MAX_CMD_LENGTH, sizeof(char));
-
             printf("\nПримеры:\n"
+                   "Это...\n"
                    "состоит из металла\n"
                    "связано с Украиной\n"
                    "красного цвета\n\n");
 
             txSpeak("\vПожалуйста, введите признак, который подходит \"%s\" и не подходит \"%s\" (согласно примерам выше): ", new_elem2->data, element->data);
 
-            gets(new_word);
+            READ_PHRASE(new_word)
 
-            strcpy(element->data, new_word);
+            size_t word_len = strlen(new_word);
+            realloc(element->data, MAX_CMD_LENGTH);
+            new_word[word_len] = 0;
+
+            strncpy(element->data, new_word, strlen(new_word));
 
             tree->tree_size += 2;
 
@@ -294,19 +331,15 @@ void object_compare (bin_tree *tree)
     char *word1 = (char *) calloc(MAX_CMD_LENGTH, sizeof(char));
     char *word2 = (char *) calloc(MAX_CMD_LENGTH, sizeof(char));
 
-    fflush(stdin);
-    gets(word1);
-    fflush(stdin);
-    gets(word2);
+    READ_PHRASE(word1)
+    READ_PHRASE(word2)
 
     while (strcmp(word1, word2) == 0)
     {
         txSpeak("\vОшибка! Пожалуйста, введите именно два РАЗНЫХ объекта.\n");
 
-        fflush(stdin);
-        gets(word1);
-        fflush(stdin);
-        gets(word2);
+        READ_PHRASE(word1)
+        READ_PHRASE(word2)
     }
 
     bin_tree_elem *element1 = search_word(tree->root, word1);
@@ -326,19 +359,15 @@ void object_compare (bin_tree *tree)
             txSpeak("Я хз что означает второй предмет");
         }
 
-        fflush(stdin);
-        gets(word1);
-        fflush(stdin);
-        gets(word2);
+        READ_PHRASE(word1)
+        READ_PHRASE(word2)
 
         while (strcmp(word1, word2) == 0)
         {
             txSpeak("\vОшибка! Пожалуйста, введите именно два РАЗНЫХ объекта.\n");
 
-            fflush(stdin);
-            gets(word1);
-            fflush(stdin);
-            gets(word2);
+            READ_PHRASE(word1)
+            READ_PHRASE(word2)
         }
 
         element1 = search_word(tree->root, word1);
@@ -395,7 +424,7 @@ void object_compare (bin_tree *tree)
             if (path1[counter + 1] == path2[counter + 1] && counter + 1 < length1 && counter + 1 < length2)
             {
                 if (path1[counter]->left == path1[counter + 1])
-                    txSpeak("\v íå %s,", path1[counter++]->data);
+                    txSpeak("\v не %s,", path1[counter++]->data);
                 else
                     txSpeak("\v %s,", path1[counter++]->data);
             }
@@ -404,9 +433,9 @@ void object_compare (bin_tree *tree)
         }
 
         if (path1[counter]->left == element1)
-            txSpeak("\v но %s %s, а %s не %s.\n", element2->data, path1[counter]->data, element1->data, path1[counter]->data);
-        else
             txSpeak("\v но %s %s, а %s не %s.\n", element1->data, path1[counter]->data, element2->data, path1[counter]->data);
+        else
+            txSpeak("\v но %s %s, а %s не %s.\n", element2->data, path1[counter]->data, element1->data, path1[counter]->data);
     }
 
     free(path1);
@@ -423,8 +452,7 @@ void object_definition (bin_tree *tree)
 
     char *word = (char *) calloc(MAX_CMD_LENGTH, sizeof(char));
 
-    fflush(stdin);
-    gets(word);
+    READ_PHRASE(word)
 
     bin_tree_elem *elem_word = search_word(tree->root, word);
 
@@ -432,7 +460,7 @@ void object_definition (bin_tree *tree)
         txSpeak("\vКажется я впервые вижу этот предмет... Я не знаю ничего про него, отстаньте!\n");
     else
     {
-        txSpeak("\vЧ тко. Вот, что я знаю о %s:\n", word);
+        txSpeak("\vЧётко. Вот, что я знаю о %s:\n", word);
         print_element_properties(elem_word);
     }
 }
@@ -470,7 +498,7 @@ void print_element_properties (bin_tree_elem *element)
         return;
 
     if (element->prev->left == element)
-        txSpeak("\v- íå %s\n", element->prev->data);
+        txSpeak("\v- не %s\n", element->prev->data);
     else if (element->prev->right == element)
         txSpeak("\v- %s\n", element->prev->data);
 
@@ -487,7 +515,7 @@ void show_base (bin_tree *tree)
     fprintf(graphviz, "digraph binary_tree {\n");
     fprintf(graphviz, "  node [shape = \"circle\", style = \"filled\", fillcolor = \"blue\", fontcolor = \"#FFFFFF\", margin = \"0.01\"];\n");
     fprintf(graphviz, "  rankdir = \"TB\";\n\n");
-    fprintf(graphviz, " label = \"База Акинатора\";\n");
+    fprintf(graphviz, "label = \"База Акинатора\";\n");
 
     print_base_tree(tree->root, graphviz);
 
@@ -495,11 +523,14 @@ void show_base (bin_tree *tree)
 
     fclose(graphviz);
 
+#ifdef UTF8_CONV
     system(PATH_CODE);
-
     system(GRAPH_BASE);
     system(DELETE_OLD);
     system(RENAME_NEW);
+#else
+    system(GRAPH_BASE_ALT);
+#endif
 
     system(PRINT_BASE);
 }
