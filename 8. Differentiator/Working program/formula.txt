@@ -1,1 +1,1 @@
-(ln(sh(x)))^(cos(ln(x^3))) + (((th(x+3))^(ln(x)))/(arctg(x^2)) + x^(x^2 - 5*sin(x^x)))/(sin(x^(sin(x))))
+(ln(sh(x)))^(cos(ln(x^a))) + (((th(x+a))^(ln(x)))/(arctg(x^2)) + x^(x^2 - 7*sin(x^x)))/(a*sin(x^(sin(x))))
