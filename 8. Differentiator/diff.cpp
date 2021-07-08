@@ -129,6 +129,7 @@ void fill_tree (bin_tree *tree, FILE *formula, variables *var, elements *elem)
         text.counter++;
     else
     {
+        printf("%d\n", *(text.counter));
         ERROR_STATE = END_OF_LINE_ERR;
         syntax_error(&text, elem, __LINE__, __FILE__);
         tree->root = nullptr;
@@ -176,6 +177,7 @@ bin_tree_elem *create_e_tree (variables *var, elements *elem, text_t *text)
         op->left = vertex;
 
         text->counter++;
+        SKIP_SPACES
 
         op->right = create_t_tree(var, elem, text);
         vertex = op;
@@ -208,6 +210,7 @@ bin_tree_elem *create_t_tree (variables *var, elements *elem, text_t *text)
             op->left = vertex;
 
             text->counter++;
+            SKIP_SPACES
 
             op->right = create_w_tree(var, elem, text);
             vertex = op;
@@ -243,6 +246,7 @@ bin_tree_elem *create_w_tree (variables *var, elements *elem, text_t *text)
             elem->elements_[elem->curr_size_++] = operands[quant - 1];
 
             text->counter++;
+            SKIP_SPACES
 
             mass[quant++] = create_p_tree(var, elem, text);
 
@@ -261,6 +265,8 @@ bin_tree_elem *create_w_tree (variables *var, elements *elem, text_t *text)
 
         vertex = operands[0];
     }
+
+    SKIP_SPACES
 
     free(operands);
     free(mass);
@@ -568,7 +574,7 @@ void print_formula (bin_tree_elem *element, FILE *tex, variables *var, int prior
         fprintf(tex, "}{");
     }
     else if (L != nullptr && element->type == OPER && (int) element->value == POW)
-    {
+    { 
         if (L->type == FUNC)
         {
             print_func_text((int) L->value, tex);
@@ -582,8 +588,11 @@ void print_formula (bin_tree_elem *element, FILE *tex, variables *var, int prior
 
             return;
         }
-
-        print_formula(L, tex, var, compare_priorities(element, L));
+        else if (L->type == VAR)
+            print_formula(L, tex, var, BRACKETS_OFF);
+        else
+            print_formula(L, tex, var, compare_priorities(element, L));
+        
         fprintf(tex, "^{");
     }
     else if (L != nullptr && element->type != SUBST)
@@ -729,7 +738,7 @@ int is_elem_func (bin_tree_elem *element)
     int state1 = 0;
     int state2 = 0;
 
-    if (element->type == VAR)
+    if (element->type == VAR && element->value == 0)
         return 1;
 
     if (L != nullptr)
@@ -754,7 +763,12 @@ bin_tree_elem *diff_tree_elem (bin_tree_elem *element, FILE *tex, variables *var
             return CR_NUM(0);
         }
         case VAR:
-            return CR_NUM(1);
+        {
+            if (element->value == 0)
+                return CR_NUM(1);
+            else 
+                return CR_NUM(0);
+        }
         case OPER:
         {
             switch ((int) element->value)
@@ -827,13 +841,13 @@ bin_tree_elem *diff_tree_elem (bin_tree_elem *element, FILE *tex, variables *var
                 {
                     ORIG_FORMULA_PRINT
 
-                    if (L->type == NUM && R->type == NUM)
+                    if ((L->type == NUM || (L->type == VAR && L->value != 0)) && (R->type == NUM || (R->type == VAR && R->value != 0)))
                     {;
                         fprintf(tex, "0\n\\end{equation}\n");
 
                         return CR_NUM(0);
                     }
-                    else if (L->type == NUM && R->type == VAR)
+                    else if ((L->type == NUM || (L->type == VAR && L->value != 0)) && R->type == VAR && R->value == 0)
                     {
                         print_formula(element, tex, var, BRACKETS_OFF);
                         fprintf(tex, "\\cdot ln \\left( %lg \\right)", L->value);
@@ -841,7 +855,7 @@ bin_tree_elem *diff_tree_elem (bin_tree_elem *element, FILE *tex, variables *var
 
                         return MULTIPLY(copy_tree(element), create_tree_element(FUNC, LN, CR_NUM(L->value), nullptr));
                     }
-                    else if (L->type == NUM && (R->type == FUNC || R->type == OPER))
+                    else if ((L->type == NUM || (L->type == VAR && L->value != 0)) && (R->type == FUNC || R->type == OPER))
                     {
                         print_formula(element, tex, var, BRACKETS_OFF);
                         fprintf(tex, "\\cdot ln(%lg) \\cdot \\left(", L->value);
@@ -851,7 +865,7 @@ bin_tree_elem *diff_tree_elem (bin_tree_elem *element, FILE *tex, variables *var
 
                         return MULTIPLY(MULTIPLY(copy_tree(element), create_tree_element(FUNC, LN, CR_NUM(L->value), nullptr)), dR);
                     }
-                    else if (L->type == VAR && R->type == NUM)
+                    else if (L->type == VAR && L->value == 0 && R->type == NUM)
                     {
                         print_formula(R, tex, var, BRACKETS_OFF);
                         fprintf(tex, "\\cdot \\left(");
@@ -860,6 +874,17 @@ bin_tree_elem *diff_tree_elem (bin_tree_elem *element, FILE *tex, variables *var
                         fprintf(tex, "\n\\end{equation}\n");
 
                         return MULTIPLY(CR_NUM(R->value), POWER_NUM(CR_VAR(L->value), R->value - 1));
+                    }
+                    else if (L->type == VAR && L->value == 0 && R->type == VAR && R->value != 0)
+                    {
+                        print_formula(R, tex, var, BRACKETS_OFF);
+                        fprintf(tex, "\\cdot ");
+                        print_formula(L, tex, var, BRACKETS_OFF);
+                        fprintf(tex, " ^{");
+                        print_formula(R, tex, var, BRACKETS_OFF);
+                        fprintf(tex, " - 1}\n\\end{equation}\n");
+
+                        return MULTIPLY(cR, POWER(CR_VAR(L->value), SUBTRACT(cR, CR_NUM(1))));
                     }
                     else if (L->type == FUNC && R->type == NUM)
                     {
