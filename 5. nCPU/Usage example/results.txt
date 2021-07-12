@@ -1,0 +1,14 @@
+The number in the pick of stack is 5040
+
+Stack Dump in 19:09:08, 12.07.2021
+Stack (OK) [006FC280] "cpu_stk"
+counter  = 1
+maxcount = 4
+Data[00DFC9E4]
+*[1] = 5040
+[2] = -nan(ind)
+[3] = -nan(ind)
+[4] = -nan(ind)
+
+Remaining numbers in stack are: 
+5040
