@@ -8,7 +8,7 @@
 #include <string.h>
 #include <math.h>
 #include <time.h>
-#include <text.h>
+#include "text.h"
 
 #include "stack_config.h"
 
