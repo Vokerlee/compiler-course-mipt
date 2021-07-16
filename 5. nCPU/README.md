@@ -1,10 +1,20 @@
 # nCPU usage guide
 
+nCPU is a version of stack-based assembly language (there is no command `mov`).
+
+* [The usage of instruction set](#the-usage-of-instruction-set)
+	* [Basics](#basics)
+	* [Сalculations](#calculations)
+	* [Jumps](#jumps)
+	* [Functions](#functions)
+	* [Memory usage](#memory-usage)
+* [Compilation](#compilation)
+
 ## The usage of instruction set
 
 ### Basics
 
-As a default data type `double` type is used. The main feature of IS is that there is no command `mov`, but only `push` and `pop` to manipulate memory. There are only five registers (`rax`, `rbx`, `rcx`, `rdx`, `rex`). So here is some examples of usage such IS features:
+As a default data type `double` type is used. The main feature of IS is that there is no command `mov`, but only `push` and `pop` to manipulate memory. There are only five registers (`rax`, `rbx`, `rcx`, `rdx`, `rex`). So here is some examples of usage such ISA features:
 
 ```asm
 push 6.5  // push 6.5 into stack (here the comment can be)
@@ -119,7 +129,7 @@ To compile the program you should use assembler compiler (`asm.exe` in `asm_comp
 
 Also there is a disassembler program, which generates code of the program, using just binary code, created by compiler `asm.exe`.
 
-As an example, let's consider the following example: first create `proga.vasm` (.vasm is Vokerlee assembler) with such code:
+As an example, let's consider the following: first create `proga.vasm` (.vasm is Vokerlee assembler in decryption) with such code:
 
 ```asm
 push 7
