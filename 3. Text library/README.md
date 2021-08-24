@@ -1,8 +1,8 @@
 # Mini text library
+This library is a simple Windows text library.
+Its usage is very simple. 
 
-The usage of library is simple. 
-
-You have the folowwing structure of text:
+You have the following structure of text:
 
 ```C++
 struct text_t

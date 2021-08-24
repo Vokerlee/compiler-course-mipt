@@ -10,19 +10,23 @@
 //! @param [in] x1   x1 - the first answer = 0
 //! @param [in] x2   x2 - the second answer = 0
 //! @param [out] roots   roots - nubmer of unique answers
+//!
 //! @version 228.1488
 //! @authors Romaaaaaa
+//!
 //! @brief enters coeffients a,b,c; changes x1 and x2 from 0 to their answers accordingly and return the nubmer of unique answers, using square_eq_sol()
 //-----------------------------------------------------------------------------
 
 int solve_square(double* x1, double* x2);
 
 //-----------------------------------------------------------------------------
-//! iszero
+//! iszero function
 //! @param [in] value
 //! @param [out] 1 / 0
+//!
 //! @version 12.44 beta
 //! @authors Romaaaaaa
+//!
 //! @brief returns 1 if value is too small (accuracy about 1e-8) and 0 if not
 //-----------------------------------------------------------------------------
 
@@ -36,8 +40,10 @@ int iszero(double value);
 //! @param [in] x1   x1 - the first answer = 0
 //! @param [in] x2   x2 - the second answer = 0
 //! @param [out] roots  roots - nubmer of unique answers = 0
+//!
 //! @version 4.0
 //! @authors Romaaaaaa
+//!
 //! @brief changes x1 and x2 from 0 to their answers accordingly and return the nubmer of unique answers
 //-----------------------------------------------------------------------------
 
@@ -50,8 +56,10 @@ int square_eq_sol(double a, double b, double c, double* x1, double* x2);
 //! @param [in] x1   x1 - the first answer = 0
 //! @param [in] x2   x2 - the second answer = 0
 //! @param [out] roots   roots = -1 if there are infinite roots, roots = 0 if there are not any root, roots = 1 if x1 = x2 = the single answer of equation
+//!
 //! @version 4.0
 //! @authors Romaaaaaa
+//!
 //! @brief make x1 = x2 = answer of equation if it exists
 //-----------------------------------------------------------------------------
 
@@ -59,10 +67,12 @@ int lin_eq_sol(double a, double b, double* x1, double* x2);
 
 //-----------------------------------------------------------------------------
 //! Test to the function square_eq_sol
-//! @param [in] x1   x1 - the first answer = 0
+//! @param [in] x1   x1 - the first answer  = 0
 //! @param [in] x2   x2 - the second answer = 0
+//!
 //! @version 4.0
 //! @authors Romaaaaaa
+//!
 //! @brief tests the function square_eq_sol
 //-----------------------------------------------------------------------------
 
@@ -74,8 +84,10 @@ void solve_square_test(double* x1, double* x2);
 //! @param [in] x1   x1 - the first answer = 0
 //! @param [in] x2   x2 - the second answer = 0
 //! @param [out] roots   roots = -1 if there are infinite roots, roots = 0 if there are not any root, roots = 1 if x1 = x2 = the single answer of equation
+//!
 //! @version 4.0
 //! @authors Romaaaaaa
+//!
 //! @brief wrire the results to the function square_eq_sol, using roots - number of answers
 //-----------------------------------------------------------------------------
 
