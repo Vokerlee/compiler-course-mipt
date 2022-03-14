@@ -4,7 +4,14 @@
 cmake_minimum_required (VERSION 3.8)
 
 # PROJECT PROPERTIES
-project ("Eugene Onegin" LANGUAGES CXX)
+project ("Akinator" LANGUAGES CXX)
+
+# WORKS ONLY ON WINDOWS
+
+if (UNIX)
+    message(FATAL_ERROR "this project cannot be assemled on this OS")
+    return()
+endif()
 
 #########################################################################
 
@@ -30,19 +37,16 @@ add_compile_options(
 
 #########################################################################
 
-# EUGENE ONEGIN
+# AKINATOR
 
-set(ONEGIN_NAME "onegin_sorter")
+set(AKINATOR_NAME "akinator")
 
-set(ONEGIN_SRC
-    "Eugene Onegin.cpp"
-    bred.cpp
-    tests.cpp
-    sort_func.cpp
-    file_sort.cpp
+set(AKINATOR_SRC
+    akinator.cpp
+    main.cpp
+    tree.cpp
 )
 
-add_executable(${ONEGIN_NAME} ${ONEGIN_SRC})
+add_executable(${AKINATOR_NAME} ${AKINATOR_SRC})
 
 #########################################################################
-

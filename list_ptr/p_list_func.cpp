@@ -561,7 +561,4 @@ void dump_p_list (p_linked_list *lst)
     fclose(graphviz);
 
     system("dot -Tpdf -o graph.pdf graph.dot");
-
-    system("start graph.pdf");
-    system("start log_list.txt");
 }

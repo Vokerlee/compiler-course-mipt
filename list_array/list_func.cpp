@@ -892,9 +892,6 @@ void dump_list (linked_list *lst)
     fclose(log);
 
     system("dot -Tpdf -o graph.pdf graph.dot");
-
-    system("start graph.pdf");
-    system("start log_list.txt");
 }
 
 void exch_phys_list (linked_list *lst, int pos1, int pos2)
