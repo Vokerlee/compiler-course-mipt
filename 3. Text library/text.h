@@ -16,10 +16,6 @@ enum read_regime
     DEFAULT_REGIME = 1,
 };
 
-#ifndef DEBUG_PRINT
-    #define DEBUG_PRINT printf
-#endif
-
 #ifndef TRUE
     #define TRUE 1
 #endif
@@ -68,7 +64,7 @@ struct text_t
 //! @brief Constructs text
 //-----------------------------------------------------------------------------
 
-void construct_text (text_t *text);
+int construct_text (text_t *text);
 
 //-----------------------------------------------------------------------------
 //! Text-destructor
@@ -78,7 +74,7 @@ void construct_text (text_t *text);
 //! @brief Destructs text, releasing all buff-memory
 //-----------------------------------------------------------------------------
 
-void destruct_text (text_t *text);
+int destruct_text (text_t *text);
 
 //-----------------------------------------------------------------------------
 //! Fills all elements in text-structure, using source-file
@@ -90,7 +86,7 @@ void destruct_text (text_t *text);
 //! @brief Fills all elements in text-structure, using source-file. If regime = "no comments", everything after "//" is ignored
 //-----------------------------------------------------------------------------
 
-void fill_text (FILE *source, text_t *text, char read_regime = DEFAULT_REGIME);
+int fill_text (FILE *source, text_t *text, char read_regime = DEFAULT_REGIME);
 
 //-----------------------------------------------------------------------------
 //! Reads file and writes in text-structure
@@ -102,7 +98,7 @@ void fill_text (FILE *source, text_t *text, char read_regime = DEFAULT_REGIME);
 //! @brief Reads file and writes in text-structure, filling text-elements with correct values
 //-----------------------------------------------------------------------------
 
-void read_file (FILE *source, text_t *text, char read_regime);
+int read_file (FILE *source, text_t *text, char read_regime);
 
 //-----------------------------------------------------------------------------
 //! Creates massive of lines
@@ -113,7 +109,7 @@ void read_file (FILE *source, text_t *text, char read_regime);
 //! @brief Creates massive of lines, using the info about text, founded by other functions (vide supra)
 //-----------------------------------------------------------------------------
 
-void fill_text_lines (text_t *text, char read_regime);
+int fill_text_lines (text_t *text, char read_regime);
 
 //-----------------------------------------------------------------------------
 //! Fills the info in text about the amount of symbols in source
@@ -124,7 +120,7 @@ void fill_text_lines (text_t *text, char read_regime);
 //! @brief Fills the info in text about the amount of symbols in source
 //-----------------------------------------------------------------------------
 
-void find_length_of_file (FILE *source, text_t *text);
+int find_length_of_file (FILE *source, text_t *text);
 
 //-----------------------------------------------------------------------------
 //! Fills the info in text about the amount of lines and real lines in source
@@ -135,7 +131,7 @@ void find_length_of_file (FILE *source, text_t *text);
 //! @brief Fills the info in text about the amount of lines and real lines in source
 //-----------------------------------------------------------------------------
 
-void find_lines_of_file (text_t *text, char read_regime);
+int find_lines_of_file (text_t *text, char read_regime);
 
 //-----------------------------------------------------------------------------
 //! Prints all structures
@@ -146,7 +142,7 @@ void find_lines_of_file (text_t *text, char read_regime);
 //! @brief Print all structures "lines" (in struct text) in "res"
 //-----------------------------------------------------------------------------
 
-void print_text_lines (FILE *res, text_t *text);
+int print_text_lines (FILE *res, text_t *text);
 
 //-----------------------------------------------------------------------------
 //! Prints the current time in time_line
@@ -156,6 +152,6 @@ void print_text_lines (FILE *res, text_t *text);
 //! @brief Prints the current time in time_line
 //-----------------------------------------------------------------------------
 
-void current_time (char *time_line);
+int current_time (char *time_line);
 
 #endif // TEXT_H_INCLUDED

@@ -168,6 +168,7 @@ int square_eq_sol(double a, double b, double c, double* x1, double* x2)
         }
     }
 
+    return 0;
 }
 
 int lin_eq_sol(double a, double b, double* x1, double* x2)

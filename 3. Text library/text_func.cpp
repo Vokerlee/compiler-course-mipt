@@ -1,8 +1,9 @@
 #include "text.h"
 
-void construct_text (text_t *text)
+int construct_text (text_t *text)
 {
-    assert(text);
+    if (text == NULL)
+        return -1;
 
     text->buffer   = nullptr;
     text->lines    = nullptr;
@@ -12,12 +13,16 @@ void construct_text (text_t *text)
     text->n_real_lines = 0;
     text->n_lines      = 0;
     text->line_counter = 0;
+
+    return 0;
 }
 
-void destruct_text (text_t *text)
+int destruct_text (text_t *text)
 {
-    assert(text);
+    if (text == NULL)
+        return -1;
 
+    free(text->lines);
     free(text->buffer);
 
     text->buffer   = nullptr;
@@ -28,12 +33,14 @@ void destruct_text (text_t *text)
     text->n_real_lines = -1;
     text->n_lines      = -1;
     text->line_counter = -1;
+
+    return 0;
 }
 
-void fill_text (FILE *source, text_t *text, char read_regime)
+int fill_text (FILE *source, text_t *text, char read_regime)
 {
-    assert(source);
-    assert(text);
+    if (source == NULL || text == NULL)
+        return -1;
 
     read_file(source, text, read_regime);
 
@@ -41,12 +48,14 @@ void fill_text (FILE *source, text_t *text, char read_regime)
     assert(text->lines);
 
     fill_text_lines(text, read_regime);
+
+    return 0;
 }
 
-void read_file (FILE *source, text_t *text, char read_regime)
+int read_file (FILE *source, text_t *text, char read_regime)
 {
-    assert(text);
-    assert(source);
+    if (source == NULL || text == NULL)
+        return -1;
 
     find_length_of_file(source, text);
 
@@ -56,11 +65,14 @@ void read_file (FILE *source, text_t *text, char read_regime)
     fread(text->buffer, sizeof(char), text->n_symbols, source);
 
     find_lines_of_file(text, read_regime);
+
+    return 0;
 }
 
-void fill_text_lines (text_t *text, char read_regime)
+int fill_text_lines (text_t *text, char read_regime)
 {
-    assert(text);
+    if (text == NULL)
+        return -1;
 
     text->counter = text->buffer;
     int real_num_line_counter = 1;
@@ -122,60 +134,70 @@ void fill_text_lines (text_t *text, char read_regime)
             }
         }
     }
+
+    return 0;
 }
 
-void find_length_of_file (FILE *source, text_t *text)
+int find_length_of_file (FILE *source, text_t *text)
 {
-    assert(source);
+    if (source == NULL || text == NULL)
+        return -1;
 
+    long start_pos = ftell(source);
     fseek(source, 0, SEEK_END);
 
     text->n_symbols = ftell(source);
 
-    fseek(source, 0, SEEK_SET);
+    fseek(source, start_pos, SEEK_SET);
+
+    return 0;
 }
 
-void find_lines_of_file (text_t *text, char read_regime)
+int find_lines_of_file (text_t *text, char read_regime)
 {
-    assert(text);
+    if (text == NULL)
+        return -1;
 
     size_t counter = 0;
 
     while (counter < text->n_symbols)
     {
-        if (text->buffer[counter] == '\n')
+        while (text->buffer[counter] == '\n')
         {
-            while (text->buffer[counter] == '\n')
-            {
-                text->n_lines++;
+            text->n_lines++;
+            counter++;
+
+            while (isspace(text->buffer[counter]) && text->buffer[counter] != '\n' && text->buffer[counter] != '\0')
+                counter++;
+        } 
+
+        if (text->buffer[counter] == '\0')
+            break;
+
+        if (read_regime == NO_COMMENTS && strncmp(text->buffer + counter, "//", 2) == 0)
+        {
+            while (text->buffer[counter] != '\n' && text->buffer[counter] != '\0')
+                counter++;
+        }
+        else
+        {
+            while (text->buffer[counter] != '\n' && text->buffer[counter] != '\0')
                 counter++;
 
-                while (isspace(text->buffer[counter]) && text->buffer[counter] != '\n' && text->buffer[counter] != '\0')
-                    counter++;
-            } 
-
-            if (text->buffer[counter] == '\0')
-                break;
-
-            if (read_regime == NO_COMMENTS && strncmp(text->buffer + counter, "//", 2) == 0)
-            {
-                while (text->buffer[counter] != '\n')
-                    counter++;
-
-                counter--;
-            }
-            else
-                text->n_real_lines++;
+            text->n_real_lines++;
         }
-
-        counter++;
     }
 
     text->n_lines++;
+
+    return text->n_lines;
 }
 
-void print_text_lines (FILE *res, text_t *text)
+int print_text_lines (FILE *res, text_t *text)
 {
+    if (res == NULL || text == NULL)
+        return -1;
+
     for (size_t line_counter = 0; line_counter < text->n_real_lines; line_counter++)
     {
         for (size_t i = 0; i < text->lines[line_counter].length; i++)
@@ -183,12 +205,17 @@ void print_text_lines (FILE *res, text_t *text)
 
         fprintf(res, "\n");
     }
+
+    return 0;
 }
 
-void current_time (char *time_line)
+int current_time (char *time_line)
 {
     time_t current_time = time(nullptr);
     tm *local_time = localtime(&current_time);
+
+    if (local_time == NULL)
+        return -1;
 
     if (local_time->tm_hour < 10)
         sprintf(time_line, "0%d:", local_time->tm_hour);
@@ -218,4 +245,6 @@ void current_time (char *time_line)
         sprintf(time_line + 13, "%d.", local_time->tm_mon + 1);
 
     sprintf(time_line + 16, "20%d", local_time->tm_year - 100);
+
+    return 0;
 }
