@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
 
     const char* disasm_listing_name = nullptr;
     if (!argv[2])
-        disasm_listing_name = "disasm_code_listing.txt.txt";
+        disasm_listing_name = "disasm_code_listing.txt";
     else
         disasm_listing_name = argv[3];
 

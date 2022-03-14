@@ -7,7 +7,7 @@
 #include <limits.h>
 #include <string.h>
 #include <math.h>
-#include <text.h>
+#include "text.h"
 
 #include "list_config.h"
 

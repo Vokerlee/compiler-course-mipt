@@ -507,14 +507,14 @@ void dump_p_list (p_linked_list *lst)
     int error = lst->error_state;
 
     if (!error)
-        fprintf(log, "List (OK) [%p] \"%s\"\n", lst, lst->list_name);
+        fprintf(log, "List (OK) [%p] \"%s\"\n", (void *) lst, lst->list_name);
     else if (error == P_LIST_NULL_PTR || error == P_LIST_NULL_ELEM_PTR || error == P_LIST_ERROR_DELETE || error == P_LIST_INVALID_INSERT_POSITION)
     {
-        fprintf(log, "List (ERROR #%d: %s) [%p] \"%s\"\n", error, error_text_p_list(error), lst, lst->list_name);
+        fprintf(log, "List (ERROR #%d: %s) [%p] \"%s\"\n", error, error_text_p_list(error), (void *) lst, lst->list_name);
         return;
     }
     else
-        fprintf(log, "List (ERROR #%d: %s) [%p] \"%s\"\n", error, error_text_p_list(error), lst, lst->list_name);
+        fprintf(log, "List (ERROR #%d: %s) [%p] \"%s\"\n", error, error_text_p_list(error), (void *) lst, lst->list_name);
 
     FILE *graphviz = fopen("graph.dot", "wb");
     assert(graphviz);
@@ -526,31 +526,32 @@ void dump_p_list (p_linked_list *lst)
     fprintf(graphviz, "  label = \"List Dump\";\n");
 
     fprintf(log, "size       = %d\n", lst->curr_size);
-    fprintf(log, "list_front = %p\n", lst->list_front);
-    fprintf(log, "list_back  = %p\n", lst->list_back);
+    fprintf(log, "list_front = %p\n", (void *) lst->list_front);
+    fprintf(log, "list_back  = %p\n", (void *) lst->list_back);
 
 
     for (p_linked_list_el *pointer = lst->list_front; pointer != nullptr; pointer = pointer->next)
-        fprintf(log, "[%p] data = %lg, next = %p, prev = %p\n", pointer, pointer->data, pointer->next, pointer->prev);
+        fprintf(log, "[%p] data = %lg, next = %p, prev = %p\n", (void *) pointer, pointer->data, (void *) pointer->next, (void *) pointer->prev);
 
     int counter = 0;
 
     for (p_linked_list_el *pointer = lst->list_front; pointer != nullptr; pointer = pointer->next)
     {
         counter++;
-        fprintf(graphviz, "  \"V%p\"[shape = \"record\", fillcolor=\"blue\", label = \"%lg | {next\\n(%p) | previous\\n(%p)} |<f0> %d\"];\n", pointer, pointer->data, pointer->next, pointer->prev, counter);
+        fprintf(graphviz, "  \"V%p\"[shape = \"record\", fillcolor=\"blue\", label = \"%lg | {next\\n(%p) | previous\\n(%p)} |<f0> %d\"];\n",
+                (void *) pointer, pointer->data, (void *) pointer->next, (void *) pointer->prev, counter);
     }
 
     for (p_linked_list_el *pointer = lst->list_back; pointer != nullptr; pointer = pointer->prev)
     {
         if (pointer->next != nullptr)
-            fprintf(graphviz, "  \"V%p\"->\"V%p\";\n", pointer, pointer->next);
+            fprintf(graphviz, "  \"V%p\"->\"V%p\";\n", (void *) pointer,(void *)  pointer->next);
     }
 
     for (p_linked_list_el *pointer = lst->list_front; pointer != nullptr; pointer = pointer->next)
     {
         if (pointer->prev != nullptr)
-            fprintf(graphviz, "  \"V%p\"->\"V%p\";\n", pointer, pointer->prev);
+            fprintf(graphviz, "  \"V%p\"->\"V%p\";\n", (void *) pointer, (void *) pointer->prev);
     }
 
     fprintf(log, "\n");

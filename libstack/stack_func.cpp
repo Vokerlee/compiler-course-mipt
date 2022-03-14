@@ -145,7 +145,14 @@ double top_stack (stack_t *stk)
 
 int empty_stack (stack_t *stk)
 {
-    STACK_ASSERT_POP_OK
+    if (error_stack(stk))
+    {
+        FILE *log = fopen("log_stack.txt", "ab");
+        dump_stack(stk, log);
+        fclose(log);
+
+        return -1;
+    }
 
     if (stk->counter != 0)
         return 0;
@@ -307,18 +314,18 @@ void dump_stack (stack_t *stk, FILE *log)
 
     if (error == STACK_NULL_PTR || error == STACK_NULL_DATA_PTR || error == STACK_INVALID_CAPACITY || error == STACK_INVALID_PUSH || error == STACK_DOUBLE_CONSTR)
     {
-        fprintf(log, "Stack (ERROR #%d: %s) [%p] \"%s\"\n", error, error_text(error), stk, stk->stack_name);
+        fprintf(log, "Stack (ERROR #%d: %s) [%p] \"%s\"\n", error, error_text(error), (void *) stk, stk->stack_name);
         return;
     }
 
     if (error == 0)
-        fprintf(log, "Stack (OK) [%p] \"%s\"\n", stk, stk->stack_name);
+        fprintf(log, "Stack (OK) [%p] \"%s\"\n", (void *) stk, stk->stack_name);
     else
-        fprintf(log, "Stack (ERROR #%d: %s) [%p] \"%s\"\n", error, error_text(error), stk, stk->stack_name);
+        fprintf(log, "Stack (ERROR #%d: %s) [%p] \"%s\"\n", error, error_text(error), (void *) stk, stk->stack_name);
 
     fprintf(log, "counter  = %d\n", stk->counter);
     fprintf(log, "maxcount = %d\n", stk->capacity);
-    fprintf(log, "Data[%p]\n", stk->data);
+    fprintf(log, "Data[%p]\n", (void *) stk->data);
 
     if (error != STACK_INVALID_COUNTER && error != STACK_HACKED)
     {

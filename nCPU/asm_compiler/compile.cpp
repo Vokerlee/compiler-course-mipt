@@ -33,9 +33,9 @@ void compile (text_t *text, FILE *res)
         int error_state = process_line(asm_buffer, &labels, &bytes_buffer, &(text->lines[i]), file_listing);
 
         if (error_state == ERROR_FORMAT)
-            fprintf(log, "ERROR FORMATTING OF CODE IN COMMAND %Iu\n", text->lines[i].real_num_line);
+            fprintf(log, "ERROR FORMATTING OF CODE IN COMMAND %zu\n", text->lines[i].real_num_line);
         else if (error_state == ERROR_UNKNOWN_CMD)
-            fprintf(log, "UNKNOWN COMMAND %Iu\n", text->lines[i].real_num_line);
+            fprintf(log, "UNKNOWN COMMAND %zu\n", text->lines[i].real_num_line);
     }
 
     write_id_asm(res);

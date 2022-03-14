@@ -810,14 +810,14 @@ void dump_list (linked_list *lst)
     int error = lst->error_state;
 
     if (!error)
-        fprintf(log, "List (OK) [%p] \"%s\"\n", lst, lst->list_name);
+        fprintf(log, "List (OK) [%p] \"%s\"\n", (void *) lst, lst->list_name);
     else if (error == LIST_NULL_PTR || error == LIST_NULL_ELEM_PTR || error == LIST_ERROR_DELETE || error == LIST_INVALID_INSERT_POSITION)
     {
-        fprintf(log, "List (ERROR #%d: %s) [%p] \"%s\"\n", error, error_text_list(error), lst, lst->list_name);
+        fprintf(log, "List (ERROR #%d: %s) [%p] \"%s\"\n", error, error_text_list(error), (void *) lst, lst->list_name);
         return;
     }
     else
-        fprintf(log, "List (ERROR #%d: %s) [%p] \"%s\"\n", error, error_text_list(error), lst, lst->list_name);
+        fprintf(log, "List (ERROR #%d: %s) [%p] \"%s\"\n", error, error_text_list(error), (void *) lst, lst->list_name);
 
     FILE *graphviz = fopen("graph.dot", "wb");
     assert(graphviz);
@@ -834,7 +834,7 @@ void dump_list (linked_list *lst)
     fprintf(log, "next_free   = %d\n", lst->next_free);
     fprintf(log, "logic_state = %d\n", lst->logic_state);
 
-    fprintf(log, "Data[%p]:\n", lst->elem);
+    fprintf(log, "Data[%p]:\n", (void *) lst->elem);
 
     fprintf(log, "*[%d] data = %lg, next = %d, prev = %d\n", 0, lst->elem[0].data, lst->elem[0].next, lst->elem[0].prev);
 

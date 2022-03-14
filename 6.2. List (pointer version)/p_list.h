@@ -7,7 +7,6 @@
 #include <limits.h>
 #include <string.h>
 #include <math.h>
-#include <windows.h>
 
 #include "p_list_config.h"
 

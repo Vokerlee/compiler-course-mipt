@@ -1,10 +1,10 @@
-#########################################################################
+ #########################################################################
 
 # CMAKE MINIMAL VERSION
 cmake_minimum_required (VERSION 3.8)
 
 # PROJECT PROPERTIES
-project ("Text library" LANGUAGES CXX)
+project ("List (pointer type)" LANGUAGES CXX)
 
 #########################################################################
 
@@ -32,14 +32,23 @@ add_compile_options(
 
 # TEXT LIBRARY
 
-set(TEXT_LIB_NAME "text")
+set(TEXT_LIB_DIR libtext)
+include_directories("../libtext")
+add_subdirectory("../libtext" ${TEXT_LIB_DIR})
 
-set(TEXT_LIB_SRC
-    text_func.cpp
+# LIST LIRARY
+
+set(LIST_LIB_NAME "listptr")
+
+set(LIST_LIB_SRC
+    p_list_func.cpp
 )
 
-add_library(${TEXT_LIB_NAME} STATIC)
-target_include_directories(${TEXT_LIB_NAME} PRIVATE text_lib)
-target_sources(${TEXT_LIB_NAME} PRIVATE ${TEXT_LIB_SRC})
+add_library(${LIST_LIB_NAME} STATIC)
+target_sources(${LIST_LIB_NAME} PRIVATE ${LIST_LIB_SRC})
+
+add_executable(test_prog main.cpp)
+target_link_libraries(test_prog PRIVATE listptr text)
 
 #########################################################################
+
