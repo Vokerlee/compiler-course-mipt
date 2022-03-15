@@ -23,7 +23,6 @@ endif()
 
 add_compile_options(
     -Wall
-    -Wpedantic
 
     -Wno-int-to-pointer-cast
     -Wno-variadic-macros
@@ -37,16 +36,25 @@ add_compile_options(
 
 #########################################################################
 
+# TEXT LIBRARY
+
+set(TEXT_LIB_DIR libtext)
+include_directories("../libtext")
+add_subdirectory("../libtext" ${TEXT_LIB_DIR})
+
 # AKINATOR
 
 set(AKINATOR_NAME "akinator")
 
 set(AKINATOR_SRC
-    akinator.cpp
-    main.cpp
-    tree.cpp
+    src/akinator.cpp
+    src/main.cpp
+    src/tree.cpp
 )
 
 add_executable(${AKINATOR_NAME} ${AKINATOR_SRC})
+
+target_include_directories(${AKINATOR_NAME} PRIVATE  ${TEXT_LIB_DIR})
+target_link_libraries(${AKINATOR_NAME} PRIVATE text)
 
 #########################################################################

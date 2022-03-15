@@ -1,7 +1,9 @@
 # Introduction to computer emulation, compiler technologies, and industrial programming
 
-This repository contains educational programs, particulary there are the first projects in Vokerlee porgramming career, so they can be far from ideal ones.
-Particulary all the projects where written for Windows by g++ compiler.
+This repository contains educational programs, particulary they are the first projects in Vokerlee porgramming career, so they can be far from ideal ones.
+All projects are crossplatform except `Akinator`, which uses `TXLib` by `Ded`.
+
+The whole repository is a one whole, so it is likely that you cannot compile every project singly, cuz they use some libs from this repository while compilation.
 
 ## Course info
 
