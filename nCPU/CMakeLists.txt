@@ -34,17 +34,22 @@ add_compile_options(
 # TEXT LIBRARY
 
 set(TEXT_LIB_PATH)
-find_library(TEXT_LIB_PATH text ${CMAKE_CURRENT_BINARY_DIR}/..)
+set(TEXT_LIB_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../libtext)
+
+find_library(TEXT_LIB_PATH NAMES text PATHS ${CMAKE_CURRENT_BINARY_DIR}/.. ${CMAKE_CURRENT_BINARY_DIR})
 
 if (NOT TEXT_LIB_PATH)
-    set(TEXT_LIB_PATH ${CMAKE_CURRENT_BINARY_DIR}/libtext)
-    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../libtext ${TEXT_LIB_PATH})
+    set(TEXT_LIB_BIN_DIR ${CMAKE_CURRENT_BINARY_DIR}/libtext)
+    add_subdirectory(${TEXT_LIB_SRC_DIR} ${TEXT_LIB_BIN_DIR})
+    set(TEXT_LIB_PATH text)
 endif()
 
 # STACK
 
-set(STACK_LIB_DIR libstack)
-add_subdirectory("../libstack" ${STACK_LIB_DIR})
+set(STACK_LIB_DIR ${CMAKE_CURRENT_BINARY_DIR}/libstack)
+set(STACK_LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/../libstack)
+add_subdirectory(${STACK_LIB_SRC} ${STACK_LIB_DIR})
+set(STACK_LIB_PATH stack)
 
 # nCPU
 
@@ -57,9 +62,9 @@ set(NCPU_SRC
 
 add_executable(${NCPU_NAME} ${NCPU_SRC})
 
-target_include_directories(${NCPU_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/..)
-target_include_directories(${NCPU_NAME} PRIVATE ${STACK_LIB_DIR} ${TEXT_LIB_PATH})
-target_link_libraries(${NCPU_NAME} PRIVATE stack text)
+target_include_directories(${NCPU_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(${NCPU_NAME} PRIVATE ${STACK_LIB_SRC} ${TEXT_LIB_SRC_DIR})
+target_link_libraries(${NCPU_NAME} PRIVATE ${STACK_LIB_PATH} ${TEXT_LIB_PATH})
 
 # ASSEMBLER COMPILER
 
@@ -73,8 +78,8 @@ set(ASM_SRC
 add_executable(${ASM_NAME} ${ASM_SRC})
 
 target_include_directories(${ASM_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
-target_include_directories(${ASM_NAME} PRIVATE ${STACK_LIB_DIR} ${TEXT_LIB_PATH})
-target_link_libraries(${ASM_NAME} PRIVATE stack text)
+target_include_directories(${ASM_NAME} PRIVATE ${STACK_LIB_SRC} ${TEXT_LIB_SRC_DIR})
+target_link_libraries(${ASM_NAME} PRIVATE ${STACK_LIB_PATH} ${TEXT_LIB_PATH})
 
 #########################################################################
 
@@ -90,8 +95,8 @@ set(DISASM_SRC
 add_executable(${DISASM_NAME} ${DISASM_SRC})
 
 target_include_directories(${DISASM_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
-target_include_directories(${DISASM_NAME} PRIVATE ${STACK_LIB_DIR} ${TEXT_LIB_PATH})
-target_link_libraries(${DISASM_NAME} PRIVATE stack text)
+target_include_directories(${DISASM_NAME} PRIVATE ${STACK_LIB_SRC} ${TEXT_LIB_SRC_DIR})
+target_link_libraries(${DISASM_NAME} PRIVATE ${STACK_LIB_PATH} ${TEXT_LIB_PATH})
 
 #########################################################################
 
