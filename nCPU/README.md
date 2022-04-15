@@ -8,7 +8,7 @@ nCPU is a version of stack-based assembly language (there is no command `mov`).
   * [Jumps](#jumps)
   * [Functions](#functions)
   * [Memory usage](#memory-usage)
-* [Compilation](#compilation)
+  * [Compilation && usage](#compilation--usage)
 
 ## The usage of instruction set
 
@@ -122,13 +122,9 @@ pop [rex - 87]
 
 Remember, that like any CPU nCPU can call segmentation fault in case of invalid memory!
 
-## Compilation
+## Compilation && usage
 
-Currently this project is compiled by g++ for Windows system.
-
-To compile your `.vasm` program you should use assembler compiler (`asm.exe` in `asm_compiler` directory), it creates binary code of written program. Then this code can be executed by `nCPU.exe` in `nCPU` directory.
-
-Also there is a disassembler program, which generates code of the program, using just binary code, created by compiler `asm.exe`.
+You can easily build the project via `CMake` and desired build system.
 
 As an example, let's consider the following: first create `proga.vasm` (.vasm is Vokerlee assembler in decryption) with such code:
 
@@ -154,9 +150,21 @@ mul
 
 factorial_end:
 ret
-
 ```
 
-To compile this program launch `asm.exe` in console: `"asm.exe" proga.vasm proga.ncpu`, where `proga.vasm` is our program and `proga.ncpu` is an ultimate binary nCPU code. After it call `"nCPU.exe" proga.ncpu` to execute the binary code. Basically the results are duplicated in `results.txt` file. If you want to change this name, enter instead the following command: `"nCPU.exe" proga.ncpu res_file.txt`.
+To compile this program you can do the following:
 
-To disassemble the program the same tactics is used: `"disasm.exe" proga.ncpu proga.vasm"` or `"disasm.exe" proga.ncpu proga.vasm disasm_listing.txt"`.
+```bash
+./nCPU/asm_compiler program.vasm program.ncpu
+./nCPU/nCPU program.ncpu [results.txt]
+```
+
+Notice that `asm_compiler` creates `file_listing.txt` file.
+
+All the results are in `results.txt`, also they are duplicated to `stdout`.
+
+The program can be disassembled:
+
+```bash
+./nCPU/disasm program.ncpu program_disasm.vasm [disasm_listing.txt]
+```
