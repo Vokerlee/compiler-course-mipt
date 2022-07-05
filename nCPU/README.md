@@ -1,5 +1,7 @@
 # nCPU usage guide
 
+**Almost the whole codebase of the project was written in the 1st semester (1st year) of study at MIPT.**
+
 nCPU is a version of stack-based assembly language (there is no command `mov`).
 
 * [The usage of instruction set](#the-usage-of-instruction-set)
